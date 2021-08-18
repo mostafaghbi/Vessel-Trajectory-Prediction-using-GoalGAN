@@ -1,1 +1,1 @@
-# Vessel-Trajectory-Prediction-using-GoalGAN-
+# Vessel Trajectory Prediction using GoalGAN
