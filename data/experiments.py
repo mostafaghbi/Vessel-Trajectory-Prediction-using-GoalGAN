@@ -136,7 +136,7 @@ class stanford_synthetic(Experiment):
                             "data_columns":  ['frame', 'ID', 'x', 'y'],
                             "delim": "tab",
                              "img_scaling": 0.05,
-                             "wall_available": True,
+                             "wall_available": False,
                             "scale": False,
                             "homography": pd.read_csv(os.path.join(self.data_path, "H_SDD.txt"), delimiter="\t"),
                             "format": "meter",

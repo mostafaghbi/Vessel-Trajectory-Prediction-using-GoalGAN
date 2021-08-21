@@ -139,7 +139,7 @@ class TrajectoryDataset(Dataset):
         img = Image.open(_path)
         if "stanford" in self.dataset_name:
 
-            ratio = self.homography.loc[((self.homography["File"] == "{}.jpg".format(os.path.split(scene)[1])) & (
+            ratio = self.homography.loc[((self.homography["File"] == "{}.jpg".format(scene)) & (
                         self.homography["Version"] == "A")), "Ratio"].iloc[0]
 
             scale_factor = ratio / self.img_scaling
@@ -247,7 +247,6 @@ class TrajectoryDataset(Dataset):
 
         columns_experiment = ['frame', 'ID', 'x', 'y']
         df = df[columns_experiment]
-
 
         return np.asarray(df.values)
 
@@ -483,7 +482,7 @@ class TrajectoryDataset(Dataset):
         collect_data = True
         for path in [file for file in self.all_files if ".jpg" in file]:
             scene_path, data_type = path.split(".")
-            scene = scene_path.split("/")[-1]
+            scene = scene_path.split("\\")[-1]
             img_parts = scene.split("-")
             if self.load_semantic_map and img_parts[-1] == "op":
                 scene = img_parts[-2]
@@ -495,6 +494,7 @@ class TrajectoryDataset(Dataset):
 
         if len(self.images) == 0:
             assert False, "No valid imges in folder"
+
         num_peds_in_seq = []
         for path in [file for file in self.all_files if ".txt" in file]:
             if not collect_data:
@@ -503,7 +503,7 @@ class TrajectoryDataset(Dataset):
                 continue
 
             scene_path, data_type = path.split(".")
-            scene = scene_path.split("/")[-1]
+            scene = scene_path.split("\\")[-1]
 
             if data_type == "txt":
                 scene = '_'.join(scene.split("_")[1:])
@@ -540,7 +540,7 @@ class TrajectoryDataset(Dataset):
 
                     if num_peds > 0:
                         num_peds_in_seq.append(num_peds)
-                        seq_list.append( np.stack((peds_scene), axis = 0 ))
+                        seq_list.append(np.stack((peds_scene), axis = 0 ))
                         if not self.scene_batching:
                             self.scene_list.extend(num_peds*[scene])
                         else:
