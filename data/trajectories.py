@@ -139,7 +139,7 @@ class TrajectoryDataset(Dataset):
         img = Image.open(_path)
         if "stanford" in self.dataset_name:
 
-            ratio = self.homography.loc[((self.homography["File"] == "{}.jpg".format(scene)) & (
+            ratio = self.homography.loc[((self.homography["File"] == "{}.jpg".format(os.path.split(scene)[1])) & (
                         self.homography["Version"] == "A")), "Ratio"].iloc[0]
 
             scale_factor = ratio / self.img_scaling
