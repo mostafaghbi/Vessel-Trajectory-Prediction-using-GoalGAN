@@ -11,7 +11,6 @@ from utils.visualize import visualize_probabilities
 # load optimizer
 from utils.radam import RAdam
 
-
 def pretrain_func(generator, train_dset, val_dset, cfg, logger = None):
 	pretrain = Pretrain(generator, train_dset, val_dset, cfg)
 
@@ -21,8 +20,6 @@ def pretrain_func(generator, train_dset, val_dset, cfg, logger = None):
 		from utils.batchsizescheduler import BatchSizeScheduler
 		callbacks.append(BatchSizeScheduler(bs = cfg.pretraining.batch_size_scheduler,
 											max_bs = cfg.pretraining.batch_size ))
-
-
 	preTrainer = Trainer(logger,
 						 callbacks = callbacks,
 						 checkpoint_callback=False,
@@ -31,8 +28,6 @@ def pretrain_func(generator, train_dset, val_dset, cfg, logger = None):
 						 **cfg.trainer)
 
 	preTrainer.fit(pretrain)
-
-
 
 class StopPretrain(pl.callbacks.base.Callback):
 	def __init__(self, min_loss):
@@ -43,13 +38,9 @@ class StopPretrain(pl.callbacks.base.Callback):
 		if trainer.callback_metrics[self.monitor_metric] < self.min_loss:
 			trainer.should_stop = True
 
-
-
 class Pretrain(pl.LightningModule):
 	def __init__(self, generator, train_dset, val_dset, cfg: DictConfig = None, loss_fns = None):
 		super().__init__()
-
-
 		self.cfg = cfg
 		self.generator = generator
 
@@ -73,6 +64,7 @@ class Pretrain(pl.LightningModule):
 		if self.cfg.pretraining.batch_size_scheduler:
 			self.batch_size = self.cfg.pretraining.batch_size_scheduler
 		else: self.batch_size = self.cfg.batch_size
+
 	def train_dataloader(self):
 		# REQUIRED
 		return DataLoader(
@@ -99,15 +91,8 @@ class Pretrain(pl.LightningModule):
 		# init loss and loss dict
 		tqdm_dict = {}
 		total_loss = 0.
-
-
-
 		batch_size = batch["size"].item()
-
 		generator_out = self.generator(batch)
-
-
-	
 		target_reshaped = batch["prob_mask"].view(batch_size, -1)
 		output_reshaped = generator_out["y_scores"].view(batch_size, -1)
 

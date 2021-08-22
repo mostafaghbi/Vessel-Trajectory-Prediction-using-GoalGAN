@@ -50,7 +50,6 @@ def run(cfg):
 					  cfg=cfg,
 					  logger=tb_logger)
 
-
 	if cfg.batch_size_scheduler:
 		# init batchsize_scheduler
 		from utils.batchsizescheduler import BatchSizeScheduler
